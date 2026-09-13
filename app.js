@@ -222,7 +222,8 @@
     if (!S.account) return;
     S.bookingsLoading = true; S.bookingsError = ''; render();
     api('mybookings', { email: S.account.email }).then(function (data) {
-      S.bookings = data.bookings || []; S.bookingsLoading = false; render();
+      S.bookings = (data.bookings || []).map(function (b) { b.Id = b.ID; return b; });
+      S.bookingsLoading = false; render();
     }).catch(function (err) {
       S.bookingsLoading = false; S.bookingsError = err.message; render();
     });
