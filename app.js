@@ -1,4 +1,4 @@
-/* Fade & Blade — public booking app (vanilla JS) */
+/* Dire Salon — public booking app (vanilla JS) */
 (function () {
   'use strict';
 
@@ -467,8 +467,8 @@
         return '<div class="' + cls + '">' + (S.step > i ? '✓' : i) + '</div>';
       }).join('') + '</div>' : '';
     return '<header class="appbar">' +
-      '<button type="button" class="brand" onclick="App.goHome()" aria-label="Fade and Blade home">' +
-      '<span class="mono">FB</span><span class="brandname">Fade &amp; Blade</span></button>' +
+      '<button type="button" class="brand" onclick="App.goHome()" aria-label="Dire Salon home">' +
+      '<span class="mono">DS</span><span class="brandname">Dire Salon</span></button>' +
       pills + right + '</header>';
   }
 
@@ -494,7 +494,7 @@
           '<span class="styledesc">' + esc(s.desc) + '</span>' +
           '<span class="stylemeta"><span>' + s.mins + '</span><span class="bookhint">Tap to book →</span></span></span></button>';
       }).join('') + '</div></section>' +
-      '<section class="section"><p class="kicker">02 — Why us</p><h2 class="title">The Fade &amp; Blade standard</h2><div class="whylist">' +
+      '<section class="section"><p class="kicker">02 — Why us</p><h2 class="title">The Dire Salon standard</h2><div class="whylist">' +
       '<div class="whyrow"><span class="whynum">01</span><div><strong>Master barbers</strong><p>Precision fades and crisp lineups, consistent every visit.</p></div></div>' +
       '<div class="whyrow"><span class="whynum">02</span><div><strong>Zero waiting</strong><p>Your chair is held. Arrive at your time, leave sharp.</p></div></div>' +
       '<div class="whyrow"><span class="whynum">03</span><div><strong>Hot-towel finish</strong><p>Every service ends clean with a hot towel and style.</p></div></div>' +
@@ -506,7 +506,7 @@
       '<div class="visitbtns"><a class="btn-primary" href="' + MAPS_URL + '" target="_blank" rel="noreferrer">Get directions</a>' +
       '<button type="button" class="btn-outline" onclick="App.copyAddress()">Copy address</button></div>' +
       '</div></section>' +
-      '<footer class="homefooter"><div class="footbrand"><span class="mono">FB</span><span class="footname">Fade &amp; Blade</span></div>' +
+      '<footer class="homefooter"><div class="footbrand"><span class="mono">DS</span><span class="footname">Dire Salon</span></div>' +
       '<p>' + BIZ_ADDR + '<br>Parking garage nearby · Book in 30 seconds</p></footer>' +
       '</div>';
   }
