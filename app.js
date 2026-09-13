@@ -476,8 +476,9 @@
       '<section class="hero" style="background-image:url(assets/hero.jpg)"><div class="heroshade"></div>' +
       '<div class="hero-inner">' +
       '<p class="hero-kicker">Owings Mills, Maryland</p>' +
-      '<h1 class="hero-title">Look sharp.<br>Feel sharper.</h1>' +
+      '<h1 class="hero-title">Look sharp.<br>Feel <em>sharper.</em></h1>' +
       '<p class="hero-sub">Precision fades, tapers and beard sculpting from master barbers. Book in 30 seconds — your chair is waiting.</p>' +
+      '<div class="herorating"><span class="stars">★★★★★</span><span>4.9 · 2,000+ happy clients</span></div>' +
       '<div class="hero-ctas"><button type="button" class="btn-primary" onclick="App.goBooking()">Book appointment</button>' +
       '<button type="button" class="btn-outline" onclick="document.getElementById(\'bb-styles\').scrollIntoView({behavior:\'smooth\'})">View services</button></div>' +
       '<div class="hero-stats"><div><strong>4.9</strong><span>2k+ reviews</span></div><div><strong>15 min</strong><span>Avg. wait</span></div><div><strong>Free</strong><span>Parking</span></div></div>' +
@@ -487,10 +488,10 @@
       '<p class="sub">The work we\'re known for. Tap a service to book it.</p><div class="stylegrid">' +
       STYLES.map(function (s) {
         return '<button type="button" class="stylecard" onclick="App.goBooking(\'' + s.id + '\')">' +
-          '<span class="styleimg"><img src="' + s.img + '" alt="' + esc(s.name) + '" loading="lazy"></span>' +
+          '<span class="styleimg"><img src="' + s.img + '" alt="' + esc(s.name) + '" loading="lazy"><span class="pricebadge">' + s.price + '</span></span>' +
           '<span class="stylebody"><span class="stylename">' + esc(s.name) + '</span>' +
           '<span class="styledesc">' + esc(s.desc) + '</span>' +
-          '<span class="stylemeta"><strong>' + s.price + '</strong><span>' + s.mins + '</span></span></span></button>';
+          '<span class="stylemeta"><span>' + s.mins + '</span><span class="bookhint">Tap to book →</span></span></span></button>';
       }).join('') + '</div></section>' +
       '<section class="section"><p class="kicker">02 — Why us</p><h2 class="title">The Fade &amp; Blade standard</h2><div class="whylist">' +
       '<div class="whyrow"><span class="whynum">01</span><div><strong>Master barbers</strong><p>Precision fades and crisp lineups, consistent every visit.</p></div></div>' +
