@@ -212,6 +212,7 @@
       var items = data.items || [];
       var taken = [];
       for (var i = 0; i < items.length; i++) {
+        if (!items[i].Time) continue;
         if (tzDateStr(items[i].Time) === S.date) taken.push(tzHHMM(items[i].Time));
       }
       S.taken = taken; S.loadingSlots = false; render();
@@ -394,6 +395,7 @@
       if (S.resched !== r) return;
       var items = data.items || [], taken = [];
       for (var i = 0; i < items.length; i++) {
+        if (!items[i].Time) continue;
         if (tzDateStr(items[i].Time) === r.date) {
           var hm = tzHHMM(items[i].Time);
           if (hm !== r.cur) taken.push(hm);
