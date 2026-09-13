@@ -103,7 +103,8 @@
   /* ---------- api ---------- */
   var ERRORS = {
     duplicate: 'This email or phone number already has a booking on that day.',
-    exists: 'An account with this email already exists. Please sign in instead.',
+    exists: 'An account with this email already exists. Sign in — or use "Forgot password?" below if you don\'t remember it.',
+    badcode: 'That code is wrong or expired. Request a new one and try again.',
     noaccount: 'No account found for this email. Please sign up first.',
     badpassword: 'Incorrect password. Please try again.',
     taken: 'That time was just taken. Please pick another.',
@@ -139,6 +140,7 @@
     confirm: null,
     account: readSession(),
     authMode: 'signin', authError: '', authBusy: false,
+    forgot: null,
     bookings: [], bookingsLoading: false, bookingsError: '',
     resched: null,
     quickBusy: false, quickError: '', quickDone: false
@@ -323,6 +325,41 @@
       saveSession(S.account);
       render();
     }).catch(function (err) { S.quickBusy = false; S.quickError = err.message; render(); });
+    return false;
+  };
+
+  App.goForgot = function () {
+    S.view = 'forgot'; S.forgot = { step: 'email', email: '', error: '', busy: false };
+    render(); window.scrollTo(0, 0);
+  };
+
+  App.sendResetCode = function () {
+    var f = S.forgot;
+    var email = normEmail(val('f-email'));
+    if (!email || email.indexOf('@') < 0) { f.error = 'Please enter your email address.'; render(); return false; }
+    f.busy = true; f.error = ''; render();
+    api('forgot', { email: email }).then(function () {
+      f.busy = false; f.step = 'code'; f.email = email; render();
+    }).catch(function (err) { f.busy = false; f.error = err.message; render(); });
+    return false;
+  };
+
+  App.doReset = function () {
+    var f = S.forgot;
+    var code = val('f-code').replace(/\D/g, '');
+    var pw = val('f-pw'), pw2 = val('f-pw2');
+    if (code.length !== 6) { f.error = 'Enter the 6-digit code from your email.'; render(); return false; }
+    if (pw.length < 6) { f.error = 'Choose a password with at least 6 characters.'; render(); return false; }
+    if (pw !== pw2) { f.error = 'Passwords do not match.'; render(); return false; }
+    f.busy = true; f.error = ''; render();
+    var salt = randomSalt();
+    sha256Hex(salt + ':' + pw).then(function (hash) {
+      return api('reset', { email: f.email, code: code, salt: salt, hash: hash });
+    }).then(function (data) {
+      f.busy = false;
+      if (!data || !data.ok) throw new Error('Password reset did not complete. Please try again.');
+      f.step = 'done'; render(); window.scrollTo(0, 0);
+    }).catch(function (err) { f.busy = false; f.error = err.message; render(); });
     return false;
   };
 
@@ -567,8 +604,34 @@
       (isSignup ? '<label class="field"><span>Confirm password</span><input id="a-pw2" type="password" maxlength="128" autocomplete="new-password" placeholder="••••••••"></label>' : '') +
       (S.authError ? '<div class="error">' + esc(S.authError) + '</div>' : '') +
       '<button type="submit" class="cta" ' + (S.authBusy ? 'disabled' : '') + '>' + (S.authBusy ? 'Please wait…' : isSignup ? 'Create account' : 'Sign in') + '</button>' +
-      (!isSignup ? '<p class="note">New here? <button type="button" class="inlinelink" onclick="App.setTab(\'signup\')">Create an account</button></p>' : '') +
+      (!isSignup ? '<p class="note"><button type="button" class="inlinelink" onclick="App.goForgot()">Forgot password?</button></p><p class="note">New here? <button type="button" class="inlinelink" onclick="App.setTab(\'signup\')">Create an account</button></p>' : '') +
       '</form></div>';
+  }
+
+  function renderForgot() {
+    var f = S.forgot || { step: 'email', email: '', error: '', busy: false };
+    var inner = '';
+    if (f.step === 'done') {
+      inner = '<div class="success">Password updated. Sign in with your new password.</div>' +
+        '<button type="button" class="cta" onclick="App.goAuth(\'signin\')">Back to sign in</button>';
+    } else if (f.step === 'code') {
+      inner = '<form class="authcard" onsubmit="return App.doReset()">' +
+        '<p class="note">If an account exists for <strong>' + esc(f.email) + '</strong>, a 6-digit code is on its way. It expires in 15 minutes.</p>' +
+        '<label class="field"><span>Reset code</span><input id="f-code" type="text" maxlength="6" inputmode="numeric" autocomplete="one-time-code" placeholder="123456"></label>' +
+        '<label class="field"><span>New password (min. 6 characters)</span><input id="f-pw" type="password" maxlength="128" autocomplete="new-password" placeholder="••••••••"></label>' +
+        '<label class="field"><span>Confirm new password</span><input id="f-pw2" type="password" maxlength="128" autocomplete="new-password" placeholder="••••••••"></label>' +
+        (f.error ? '<div class="error">' + esc(f.error) + '</div>' : '') +
+        '<button type="submit" class="cta" ' + (f.busy ? 'disabled' : '') + '>' + (f.busy ? 'Please wait…' : 'Reset password') + '</button>' +
+        '<p class="note">Didn\'t get it? <button type="button" class="inlinelink" onclick="App.goForgot()">Send a new code</button></p></form>';
+    } else {
+      inner = '<form class="authcard" onsubmit="return App.sendResetCode()">' +
+        '<p class="note">Enter your account email and we\'ll send you a 6-digit reset code.</p>' +
+        '<label class="field"><span>Email</span><input id="f-email" type="email" maxlength="255" autocomplete="email" inputmode="email" placeholder="you@example.com"></label>' +
+        (f.error ? '<div class="error">' + esc(f.error) + '</div>' : '') +
+        '<button type="submit" class="cta" ' + (f.busy ? 'disabled' : '') + '>' + (f.busy ? 'Sending…' : 'Send reset code') + '</button></form>';
+    }
+    return '<div class="anim center"><button type="button" class="linkback" onclick="App.goAuth(\'signin\')">← Back to sign in</button>' +
+      '<p class="kicker">Account recovery</p><h2 class="title">Reset your password</h2>' + inner + '</div>';
   }
 
   function renderMyBookings() {
@@ -650,6 +713,7 @@
     var main = '';
     if (S.view === 'home') main = renderHome();
     else if (S.view === 'auth') main = renderAuth();
+    else if (S.view === 'forgot') main = renderForgot();
     else if (S.view === 'mybookings') main = S.account ? renderMyBookings() : renderAuth();
     else if (S.view === 'booking') {
       main = S.step === 1 ? renderSchedule() : S.step === 2 ? renderDetails() : renderDone();
