@@ -7,16 +7,17 @@
   var SESSION_KEY = 'fb_pub_account';
 
   var STYLES = [
-    { id: 'skin-fade', name: 'Signature Skin Fade', price: '$35', mins: '40 min', desc: 'Zero-blend fade with a crisp lineup', img: 'assets/style-skin-fade.jpg' },
-    { id: 'taper', name: 'Classic Taper', price: '$30', mins: '30 min', desc: 'Clean sides with a natural finish', img: 'assets/style-taper.jpg' },
-    { id: 'buzz', name: 'Buzz Cut', price: '$25', mins: '20 min', desc: 'Sharp and low-maintenance', img: 'assets/style-buzz.jpg' },
-    { id: 'curly', name: 'Curly Top + Fade', price: '$38', mins: '45 min', desc: 'Defined curls, faded sides', img: 'assets/style-curly.jpg' },
-    { id: 'beard', name: 'Beard Sculpt', price: '$20', mins: '20 min', desc: 'Razor-sharp edges, hot-towel finish', img: 'assets/style-beard.jpg' },
-    { id: 'kids', name: 'Kids Cut', price: '$25', mins: '30 min', desc: 'Patient and kid-friendly, 12 & under', img: 'assets/style-kids.jpg' }
+    { id: 'skin-fade', name: 'Signature Skin Fade', price: '$35', mins: '40 min', desc: 'Zero-blend fade with a crisp lineup', img: 'assets/style-skin-fade.jpg?v=2' },
+    { id: 'taper', name: 'Classic Taper', price: '$30', mins: '30 min', desc: 'Clean sides with a natural finish', img: 'assets/style-taper.jpg?v=2' },
+    { id: 'buzz', name: 'Buzz Cut', price: '$25', mins: '20 min', desc: 'Sharp and low-maintenance', img: 'assets/style-buzz.jpg?v=2' },
+    { id: 'curly', name: 'Curly Top + Fade', price: '$38', mins: '45 min', desc: 'Defined curls, faded sides', img: 'assets/style-curly.jpg?v=2' },
+    { id: 'beard', name: 'Beard Sculpt', price: '$20', mins: '20 min', desc: 'Razor-sharp edges, hot-towel finish', img: 'assets/style-beard.jpg?v=2' },
+    { id: 'kids', name: 'Kids Cut', price: '$25', mins: '30 min', desc: 'Patient and kid-friendly, 12 & under', img: 'assets/style-kids.jpg?v=2' }
   ];
   var CARRIERS = ['AT&T', 'Verizon', 'T-Mobile', 'Sprint', 'Boost Mobile', 'Cricket', 'Metro by T-Mobile', 'US Cellular', 'Google Fi'];
-  var PLUS_CODE = 'C648+MV Owings Mills, Maryland';
-  var MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(PLUS_CODE);
+  var BIZ_ADDR = '946 Sligo Ave, Silver Spring, MD 20910';
+  var GARAGE_ADDR = '8100 Fenton St, Silver Spring, MD 20910';
+  var MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(BIZ_ADDR);
 
   /* ---------- helpers ---------- */
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
@@ -195,10 +196,10 @@
       S.selectedStyle = ''; S.confirm = null; S.quickDone = false; S.quickError = '';
       render(); window.scrollTo(0, 0); loadTaken();
     },
-    copyPlusCode: function () {
+    copyAddress: function () {
       try {
         var tmp = document.createElement('textarea');
-        tmp.value = PLUS_CODE; document.body.appendChild(tmp); tmp.select();
+        tmp.value = BIZ_ADDR; document.body.appendChild(tmp); tmp.select();
         document.execCommand('copy'); document.body.removeChild(tmp);
       } catch (e) {}
     }
@@ -475,7 +476,7 @@
     return '<div class="anim" style="padding:0">' +
       '<section class="hero" style="background-image:url(assets/hero.jpg)"><div class="heroshade"></div>' +
       '<div class="hero-inner">' +
-      '<p class="hero-kicker">Owings Mills, Maryland</p>' +
+      '<p class="hero-kicker">Silver Spring, Maryland</p>' +
       '<h1 class="hero-title">Look sharp.<br>Feel <em>sharper.</em></h1>' +
       '<p class="hero-sub">Precision fades, tapers and beard sculpting from master barbers. Book in 30 seconds — your chair is waiting.</p>' +
       '<div class="herorating"><span class="stars">★★★★★</span><span>4.9 · 2,000+ happy clients</span></div>' +
@@ -488,7 +489,7 @@
       '<p class="sub">The work we\'re known for. Tap a service to book it.</p><div class="stylegrid">' +
       STYLES.map(function (s) {
         return '<button type="button" class="stylecard" onclick="App.goBooking(\'' + s.id + '\')">' +
-          '<span class="styleimg"><img src="' + s.img + '" alt="' + esc(s.name) + '" loading="lazy"><span class="pricebadge">' + s.price + '</span></span>' +
+          '<span class="styleimg"><img src="' + s.img + '" alt="' + esc(s.name) + '" loading="lazy"></span>' +
           '<span class="stylebody"><span class="stylename">' + esc(s.name) + '</span>' +
           '<span class="styledesc">' + esc(s.desc) + '</span>' +
           '<span class="stylemeta"><span>' + s.mins + '</span><span class="bookhint">Tap to book →</span></span></span></button>';
@@ -499,14 +500,14 @@
       '<div class="whyrow"><span class="whynum">03</span><div><strong>Hot-towel finish</strong><p>Every service ends clean with a hot towel and style.</p></div></div>' +
       '</div></section>' +
       '<section class="section"><p class="kicker">03 — Visit</p><h2 class="title">Find the shop</h2><div class="visitcard">' +
-      '<div class="visitrow"><span class="visitlabel">Location</span><div><strong>' + PLUS_CODE + '</strong><p>Owings Mills, Maryland</p></div></div>' +
-      '<div class="visitrow"><span class="visitlabel">Parking</span><div><strong>Free on-site parking</strong><p>Pull right up front — plenty of spots, no meters.</p></div></div>' +
+      '<div class="visitrow"><span class="visitlabel">Location</span><div><strong>946 Sligo Ave</strong><p>Silver Spring, MD 20910</p></div></div>' +
+      '<div class="visitrow"><span class="visitlabel">Parking</span><div><strong>Parking garage</strong><p>' + GARAGE_ADDR + '</p></div></div>' +
       '<div class="visitrow"><span class="visitlabel">Hours</span><div><strong>Mon–Fri 9a–7p · Sat 9a–5p · Sun 10a–4p</strong><p>Walk-ins welcome; bookings get priority.</p></div></div>' +
       '<div class="visitbtns"><a class="btn-primary" href="' + MAPS_URL + '" target="_blank" rel="noreferrer">Get directions</a>' +
-      '<button type="button" class="btn-outline" onclick="App.copyPlusCode()">Copy plus code</button></div>' +
+      '<button type="button" class="btn-outline" onclick="App.copyAddress()">Copy address</button></div>' +
       '</div></section>' +
       '<footer class="homefooter"><div class="footbrand"><span class="mono">FB</span><span class="footname">Fade &amp; Blade</span></div>' +
-      '<p>' + PLUS_CODE + '<br>Free parking · Book in 30 seconds</p></footer>' +
+      '<p>' + BIZ_ADDR + '<br>Parking garage nearby · Book in 30 seconds</p></footer>' +
       '</div>';
   }
 
@@ -516,7 +517,7 @@
       '<p class="kicker">Booking</p><h2 class="title">Pick your time</h2>' +
       '<p class="sub">Choose a day, then a time that suits you.</p>';
     if (st) {
-      body += '<div class="selstyle"><span>' + esc(st.name) + ' — ' + st.price + '</span><button type="button" onclick="App.clearStyle()">Remove</button></div>';
+      body += '<div class="selstyle"><span>' + esc(st.name) + '</span><button type="button" onclick="App.clearStyle()">Remove</button></div>';
     } else {
       body += '<div class="stylepicker"><span>Service</span><div class="chips">' +
         STYLES.map(function (s) {
@@ -541,7 +542,7 @@
       '<p class="kicker">Booking</p><h2 class="title">Your details</h2>' +
       '<p class="sub">We\'ll hold your chair with this information.</p>' +
       '<div class="selsummary">' +
-      (st ? '<div class="sumrow"><span>Service</span><strong>' + esc(st.name) + ' — ' + st.price + '</strong></div>' : '') +
+      (st ? '<div class="sumrow"><span>Service</span><strong>' + esc(st.name) + '</strong></div>' : '') +
       '<div class="sumrow"><span>Date</span><strong>' + formatLong(S.date) + '</strong></div>' +
       '<div class="sumrow"><span>Time</span><strong>' + formatTime(S.time) + '</strong></div></div>' +
       '<label class="field"><span>Full name</span><input id="f-name" type="text" maxlength="255" autocomplete="name" placeholder="Your full name" value="' + esc(acct ? acct.name : '') + '"></label>' +
@@ -562,8 +563,8 @@
       (c.style ? '<div class="ticketrow"><span>Service</span><strong>' + esc(c.style) + '</strong></div>' : '') +
       '<div class="ticketrow"><span>Date</span><strong>' + formatLong(c.date) + '</strong></div>' +
       '<div class="ticketrow"><span>Time</span><strong>' + formatTime(c.time) + '</strong></div>' +
-      '<div class="ticketrow"><span>Address</span><strong class="ticketsmall">' + PLUS_CODE + '</strong></div></div>' +
-      '<p class="note">Free on-site parking — pull right up front.</p>';
+      '<div class="ticketrow"><span>Address</span><strong class="ticketsmall">' + BIZ_ADDR + '</strong></div></div>' +
+      '<p class="note">Parking garage: ' + GARAGE_ADDR + '.</p>';
     if (!S.account && !S.quickDone) {
       body += '<form class="quickacct" onsubmit="return App.quickCreate()">' +
         '<strong>Keep track of this booking</strong>' +
