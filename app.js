@@ -406,12 +406,6 @@
     var r = S.resched;
     if (!r || !r.time) { if (r) { r.error = 'Pick an available time to move your booking.'; render(); } return; }
     if (r.taken.indexOf(r.time) >= 0) { r.error = 'That time was just taken. Please pick another.'; render(); return; }
-    var clash = false;
-    for (var i = 0; i < S.bookings.length; i++) {
-      var b = S.bookings[i];
-      if (b.Id !== r.id && tzDateStr(b.Time) === r.date) { clash = true; break; }
-    }
-    if (clash) { r.error = 'You already have a booking on ' + formatLong(r.date) + '. Pick a different day.'; render(); return; }
     r.busy = true; r.error = ''; render();
     api('reschedule', { id: r.id, email: S.account.email, timeISO: wallToISO(r.date, r.time) })
       .then(function () { S.resched = null; loadBookings(); })
